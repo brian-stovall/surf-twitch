@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	var sortAll = grab('sort-all');
 	var sortOnline = grab('sort-online');
 	var sortOffline = grab('sort-offline');
-	var addChannel = grab('add-channel');
+	var addchannel = grab('add-channel');
 	var buttons = document.getElementsByClassName('btn');
 
-	var APIPrefix = 'https://api.twitch.tv/kraken/channels/';
+	var channelPrefix = 'https://api.twitch.tv/kraken/channels/';
+	var streamPrefix = 'https://api.twitch.tv/kraken/streams/';
 
 	//maintain a list of all channels displayed so far
 	var displayed = [];
@@ -21,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	for (var i = 0; i < preloads.length; i++) 
 		makeRequest(preloads[i]);
 
-	//give focus to addChannel
-	addChannel.focus();
+	//give focus to addchannel
+	addchannel.focus();
 
 	//helper fn - returns boolean based on if channel 
 	//is currently displayed on page
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	//handle text requests
-	addChannel.onkeyup = function (event) {
+	addchannel.onkeyup = function (event) {
 		if (event.key === 'Enter') {
 			if (this.value !== '' && !isDisplayed(this.value)) {
 				//check the api for the channel
@@ -54,12 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
 				populate(JSON.parse(twitchRequest.responseText));
 			} else  {
 				//let the user know
-				alert('Channel wasn\'t found on Twitch.tv.');
+				alert('channel wasn\'t found on Twitch.tv.');
 				console.log('fail?! rec\'d: ' + twitchRequest.responseText);
 			}
 		}
 	
-			twitchRequest.open('GET', APIPrefix + channelName);
+			twitchRequest.open('GET', channelPrefix + channelName);
 			twitchRequest.send();
 			console.log('request sent');
 	}
@@ -71,36 +72,67 @@ document.addEventListener('DOMContentLoaded', function() {
 		console.log('contains keys: ' + Object.keys(data));
 		console.log('populating');
 
-		//a link to the channel to wrap the containing div in
-		var channelLink = document.createElement('a');
-		channelLink.href = data.url;
+		//first, get the stream data
+		var streamRequest = new XMLHttpRequest();
 
-		//the container for the data
-		var infoDiv = document.createElement('div');
-		infoDiv.classList.add('infoDiv');
-		channelLink.appendChild(infoDiv);
+		streamRequest.onload = function() {
+			if (streamRequest.status >= 200 && streamRequest.status <= 400) {
+				//go on with the data
+				gotStreamData(JSON.parse(streamRequest.responseText));
+			} else  {
+				//go ahead without the data
+				gotStreamData(null);
+			}
+		}
+	
+			streamRequest.open('GET', streamPrefix + data.name);
+			streamRequest.send();
+			console.log('stream request sent');
 
-		//subcontainer for the user pic
-		var userPic = document.createElement('div');
-		userPic.classList.add('userPic');
-		userPic.style['background-image'] = (data.logo) ? 'url(' + data.logo + ')':
-				'url(\'assets/question.png\')';
-		infoDiv.appendChild(userPic);
+		
 
-		//subcontainer for the channel name
-		var name = document.createElement('h3');
-		name.classList.add('userName');
-		name.textContent = data.name;
-		infoDiv.appendChild(name);
+		//resume once we've gotten the data
+		function gotStreamData(stream) {
+			//a link to the channel to wrap the containing div in
+			var channelLink = document.createElement('a');
+			channelLink.href = data.url;
 
-		//subcontainer for the channel status
-		var userStatus = document.createElement('p');
-		userStatus.classList.add('userStatus');
-		userStatus.textContent = data.status;
-		infoDiv.appendChild(userStatus);
+			//the container for the data
+			var infoDiv = document.createElement('div');
+			infoDiv.classList.add('infoDiv');
+			channelLink.appendChild(infoDiv);
 
-		//add new elements to document
-		container.appendChild(channelLink);
+			//subcontainer for the user pic
+			var userPic = document.createElement('div');
+			userPic.classList.add('userPic');
+			userPic.style['background-image'] = (data.logo) ? 'url(' + data.logo + ')':
+					'url(\'assets/question.png\')';
+			infoDiv.appendChild(userPic);
+
+			//subcontainer that has a preview or just reads offline
+			var previewPic = document.createElement('div');
+			previewPic.classList.add('previewPic');
+			if (stream && stream.stream) previewPic.style['background-image'] = 
+				'url(' + stream.stream.preview.large + ')';
+			else 
+				previewPic.textContent='offline';
+			infoDiv.appendChild(previewPic);
+
+			//subcontainer for the channel name
+			var name = document.createElement('h3');
+			name.classList.add('userName');
+			name.textContent = data.name;
+			infoDiv.appendChild(name);
+
+			//subcontainer for the channel status
+			var userStatus = document.createElement('p');
+			userStatus.classList.add('userStatus');
+			userStatus.textContent = data.status;
+			infoDiv.appendChild(userStatus);
+
+			//add new elements to document
+			container.appendChild(channelLink);
+		}
 	}
 
 });
