@@ -13,9 +13,17 @@
 			<input type='text' placeholder='Add a new channel by its name here'
 				class='form-control' id='add-channel'>
 			</div>
-			<button class='btn btn-default' id='sort-button' type='button'>
-				Viewing: <span id='sort-type'>All</span>
-			</button>
+			<span class='input-group-btn' id='sort-buttons'>
+				<div class='btn btn-primary' id='sort-all' type='div'>
+					All
+				</div>
+				<div class='btn btn-default' id='sort-online' type='div'>
+					Online
+				</div>
+				<div class='btn btn-default' id='sort-offline' type='div'>
+					Offline
+				</div>
+			</span>
 	<div id='result-container'>
 	</div>
 </body>

@@ -1,3 +1,40 @@
 body {
 	background-color:black;
 }
+
+nav {
+	height:8vh;
+	padding:0;
+}
+
+#add-channel {
+	position:absolute;
+	width:50vw;
+	left:5vw;
+	top:.8vw;
+	margin:0;
+}
+
+#sort-buttons {
+	position:absolute;
+	left:65vw;
+	top:.8vw;
+	margin:0;
+}
+
+#sort-all {
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+}
+
+#sort-online {
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+}
+
+#sort-offline {
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+}
