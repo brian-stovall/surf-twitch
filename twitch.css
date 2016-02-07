@@ -1,4 +1,5 @@
-body {
+html {
+	overflow-x:hidden;
 }
 
 nav {
@@ -9,12 +10,38 @@ nav {
 .infoDiv {
 	position:relative;
 	width:70vw;
-	min-height:10vh;
+	height:15vh;
 	left:15vw;
 	background-color:pink;
 	margin-top:3vh;
 	border:solid 2px black;
 	border-radius:5px;
+}
+
+.infoDiv .userPic {
+	position:absolute;
+	top:0;
+	left:0;
+	width:15%;
+	height:100%;
+	background-size:contain;
+	background-position:left;
+	background-repeat:no-repeat;
+}
+
+.infoDiv .userName {
+	margin:0;
+	position:absolute;
+	top:5%;
+	left:18%;
+}
+
+.infoDiv .userStatus {
+	margin:0;
+	position:absolute;
+	top:35%;
+	left:21%;
+	width:50%;
 }
 
 #add-channel {
@@ -56,8 +83,10 @@ nav {
 	width:100vw;
 	min-height:92vh;
 	top:8vh;
-	background-image:url('assets/twitch-tv.jpg');
-	background-size:cover;
+	background-image:url('assets/twitch-tv.png');
+	background-size:contain;
 	background-position:center;
-	background-scroll:fixed;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-color:#636;
 }
