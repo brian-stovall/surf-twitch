@@ -2,30 +2,39 @@
 <html>
 <head>
 	<meta charset='utf-8'>
-	<source src='twitch.js' type='text/javascript'></source>
+	<script src='twitch.js' type='text/javascript'></script>
 	<link href='twitch.css' rel='stylesheet'>
 	<link href='bootstrap.min.css' rel='stylesheet'>
 	<title>Surf Twitch.tv</title>
 </head>
 <body>
+  <!-- begin navbar -->
 	<nav class='navbar navbar-inverse navbar-fixed-top'>
+
 		<div class='form-group'>
 			<input type='text' placeholder='Add a new channel by its name here'
 				class='form-control' id='add-channel'>
+		</div>
+
+		<span class='input-group-btn' id='sort-buttons'>
+			<div class='btn btn-primary' id='sort-all' type='div'>
+				All
 			</div>
-			<span class='input-group-btn' id='sort-buttons'>
-				<div class='btn btn-primary' id='sort-all' type='div'>
-					All
-				</div>
-				<div class='btn btn-default' id='sort-online' type='div'>
-					Online
-				</div>
-				<div class='btn btn-default' id='sort-offline' type='div'>
-					Offline
-				</div>
-			</span>
+
+			<div class='btn btn-default' id='sort-online' type='div'>
+				Online
+			</div>
+
+			<div class='btn btn-default' id='sort-offline' type='div'>
+				Offline
+			</div>
+		</span>
+	</nav>
+  <!-- end navbar -->
+
 	<div id='result-container'>
 	</div>
+
 </body>
 </html>
 
