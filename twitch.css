@@ -10,9 +10,9 @@ nav {
 .infoDiv {
 	position:relative;
 	width:70vw;
-	height:15vh;
+	height:100px;
 	left:15vw;
-	background-color:pink;
+	background-color:#999;
 	margin-top:3vh;
 	border:solid 2px black;
 	border-radius:5px;
@@ -34,14 +34,20 @@ nav {
 	position:absolute;
 	top:5%;
 	left:18%;
+	color:black;
 }
 
 .infoDiv .userStatus {
+	color:black;
 	margin:0;
 	position:absolute;
 	top:35%;
 	left:21%;
 	width:50%;
+}
+
+.infoDiv h4 {
+	color:black;
 }
 
 .infoDiv .previewPic {
@@ -51,13 +57,14 @@ nav {
 	right:0;
 	width:25%;
 	height:100%;
+	text-align:right;
 	background-size:contain;
 	background-position:right;
 	background-repeat:no-repeat;
 }
 
-.infoDiv .previewPic p {
-	position:absolute;
+.infoDiv a:hover .userName, .infoDiv a:hover .userStatus {
+	color:blue;
 }
 
 #add-channel {

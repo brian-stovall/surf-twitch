@@ -93,45 +93,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		//resume once we've gotten the data
 		function gotStreamData(stream) {
-			//a link to the channel to wrap the containing div in
-			var channelLink = document.createElement('a');
-			channelLink.href = data.url;
 
 			//the container for the data
 			var infoDiv = document.createElement('div');
 			infoDiv.classList.add('infoDiv');
-			channelLink.appendChild(infoDiv);
+			
+			//link channel to wrap everything but div in
+			var channelLink = document.createElement('a');
+			channelLink.href = data.url;
 
 			//subcontainer for the user pic
 			var userPic = document.createElement('div');
 			userPic.classList.add('userPic');
 			userPic.style['background-image'] = (data.logo) ? 'url(' + data.logo + ')':
 					'url(\'assets/question.png\')';
-			infoDiv.appendChild(userPic);
+			channelLink.appendChild(userPic);
 
 			//subcontainer that has a preview or just reads offline
 			var previewPic = document.createElement('div');
 			previewPic.classList.add('previewPic');
 			if (stream && stream.stream) previewPic.style['background-image'] = 
 				'url(' + stream.stream.preview.large + ')';
-			else 
-				previewPic.textContent='offline';
-			infoDiv.appendChild(previewPic);
+			else {
+				//add h2 to previewPic that says 'offline'
+				var offlineNote = document.createElement('h4');
+				offlineNote.textContent='offline';
+				previewPic.appendChild(offlineNote);
+			}
+			channelLink.appendChild(previewPic);
+
 
 			//subcontainer for the channel name
 			var name = document.createElement('h3');
 			name.classList.add('userName');
 			name.textContent = data.name;
-			infoDiv.appendChild(name);
+			channelLink.appendChild(name);
 
 			//subcontainer for the channel status
 			var userStatus = document.createElement('p');
 			userStatus.classList.add('userStatus');
 			userStatus.textContent = data.status;
-			infoDiv.appendChild(userStatus);
+			channelLink.appendChild(userStatus);
 
 			//add new elements to document
-			container.appendChild(channelLink);
+			infoDiv.appendChild(channelLink);
+			container.appendChild(infoDiv);
 		}
 	}
 
