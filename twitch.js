@@ -5,25 +5,25 @@ document.addEventListener('DOMContentLoaded', function() {
 	var sortAll = grab('sort-all');
 	var sortOnline = grab('sort-online');
 	var sortOffline = grab('sort-offline');
-	var addchannel = grab('add-channel');
+	var addChannel = grab('add-channel');
 	var buttons = document.getElementsByClassName('btn');
 
 	var channelPrefix = 'https://api.twitch.tv/kraken/channels/';
 	var streamPrefix = 'https://api.twitch.tv/kraken/streams/';
 
-	//maintain a list of all channels displayed so far
+	//maintain a list of displayed channel names
 	var displayed = [];
 
 	//list of channels to autoload
-	var preloads = ["freecodecamp", "storbeck",  
+	var preloads = ['esl_sc2', "freecodecamp", "storbeck",  
 		"habathcx","RobotCaleb","noobs2ninjas"];
 
-	//preload
+	//preload function
 	for (var i = 0; i < preloads.length; i++) 
 		makeRequest(preloads[i]);
 
-	//give focus to addchannel
-	addchannel.focus();
+	//give focus to addChannel
+	addChannel.focus();
 
 	//helper fn - returns boolean based on if channel 
 	//is currently displayed on page
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	//handle text requests
-	addchannel.onkeyup = function (event) {
+	addChannel.onkeyup = function (event) {
 		if (event.key === 'Enter') {
 			if (this.value !== '' && !isDisplayed(this.value)) {
 				//check the api for the channel
@@ -43,6 +43,43 @@ document.addEventListener('DOMContentLoaded', function() {
 			//no matter what, clear the box
 			this.value = ''; 
 		}
+	}
+
+	//set event handlers for buttons
+	sortAll.onclick = function() {
+		toggleButtons(this);
+		var infoDivs = document.getElementsByClassName('infoDiv');
+		for (i = 0; i < infoDivs.length; i++) 
+			infoDivs[i].style.display = 'block';
+	};
+
+	sortOnline.onclick = function() {
+		toggleButtons(this);
+		var infoDivs = document.getElementsByClassName('infoDiv');
+		for (i = 0; i < infoDivs.length; i++) 
+			infoDivs[i].style.display = (infoDivs[i].isStreaming) ?
+				'block' : 'none';
+	};
+
+	sortOffline.onclick = function() {
+		toggleButtons(this);
+		var infoDivs = document.getElementsByClassName('infoDiv');
+		for (i = 0; i < infoDivs.length; i++) 
+			infoDivs[i].style.display = (infoDivs[i].isStreaming) ?
+				'none' : 'block';
+	};
+
+	//sets the passed button to btn-primary and the others to btn-default
+	function toggleButtons(button) {
+		for (var i = 0; i < buttons.length; i++) {
+			if (buttons[i] === button) {
+				buttons[i].classList.add('btn-primary');
+				buttons[i].classList.remove('btn-default');
+			} else {
+				buttons[i].classList.remove('btn-primary');
+				buttons[i].classList.add('btn-default');
+			}
+		};
 	}
 
 	//loads and sends twitchRequest with channelName
@@ -112,13 +149,20 @@ document.addEventListener('DOMContentLoaded', function() {
 			//subcontainer that has a preview or just reads offline
 			var previewPic = document.createElement('div');
 			previewPic.classList.add('previewPic');
-			if (stream && stream.stream) previewPic.style['background-image'] = 
-				'url(' + stream.stream.preview.large + ')';
-			else {
+
+			//the channel is currently streaming
+			if (stream && stream.stream) {
+				previewPic.style['background-image'] = 
+						'url(' + stream.stream.preview.large + ')';
+				infoDiv.isStreaming = true;
+				infoDiv.style['background-color'] = '#944';
+			} else {
 				//add h2 to previewPic that says 'offline'
 				var offlineNote = document.createElement('h4');
 				offlineNote.textContent='offline';
 				previewPic.appendChild(offlineNote);
+				infoDiv.isStreaming = false;
+				infoDiv.style['background-color'] = 'grey';
 			}
 			channelLink.appendChild(previewPic);
 
