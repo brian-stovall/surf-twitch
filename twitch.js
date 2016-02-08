@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	var displayed = [];
 
 	//list of channels to autoload
-	var preloads = ['esl_sc2', "freecodecamp", "storbeck",  
-		"habathcx","RobotCaleb","noobs2ninjas"];
+	var preloads = ['esl_sc2', "freecodecamp", "monstercat",  
+		"habathcx","RobotCaleb","tom", 'streamerhouse', 'insomniacgamers12345'];
 
 	//preload function
 	for (var i = 0; i < preloads.length; i++) 
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	//set event handlers for buttons
 	sortAll.onclick = function() {
 		toggleButtons(this);
+		addChannel.focus();
 		var infoDivs = document.getElementsByClassName('infoDiv');
 		for (i = 0; i < infoDivs.length; i++) 
 			infoDivs[i].style.display = 'block';
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	sortOnline.onclick = function() {
 		toggleButtons(this);
+		addChannel.focus();
 		var infoDivs = document.getElementsByClassName('infoDiv');
 		for (i = 0; i < infoDivs.length; i++) 
 			infoDivs[i].style.display = (infoDivs[i].isStreaming) ?
@@ -63,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	sortOffline.onclick = function() {
 		toggleButtons(this);
+		addChannel.focus();
 		var infoDivs = document.getElementsByClassName('infoDiv');
 		for (i = 0; i < infoDivs.length; i++) 
 			infoDivs[i].style.display = (infoDivs[i].isStreaming) ?
