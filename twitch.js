@@ -8,15 +8,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	var addChannel = grab('add-channel');
 	var buttons = document.getElementsByClassName('btn');
 
+	//api prefixes
 	var channelPrefix = 'https://api.twitch.tv/kraken/channels/';
 	var streamPrefix = 'https://api.twitch.tv/kraken/streams/';
 
-	//maintain a list of displayed channel names
-	var displayed = [];
-
 	//list of channels to autoload
 	var preloads = ['esl_sc2', "freecodecamp", "monstercat",  
-		"habathcx","RobotCaleb","tom", 'streamerhouse', 'insomniacgamers12345'];
+		"habathcx","robotcaleb","tom", 'streamerhouse', 'insomniacgamers12345'];
+
+	//maintain a list of displayed channel names, starting with the preloads
+	var displayed = preloads.slice();
 
 	//preload function
 	for (var i = 0; i < preloads.length; i++) 
@@ -48,7 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	//set event handlers for buttons
 	sortAll.onclick = function() {
 		toggleButtons(this);
+		//user can still type without having to manually return focus
 		addChannel.focus();
+		//make all infoDivs visible
 		var infoDivs = document.getElementsByClassName('infoDiv');
 		for (i = 0; i < infoDivs.length; i++) 
 			infoDivs[i].style.display = 'block';
@@ -91,26 +94,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		twitchRequest.onload = function() {
 			if (twitchRequest.status >= 200 && twitchRequest.status <= 400) {
-				console.log('success! rec\'d: ' + twitchRequest.responseText);
 				populate(JSON.parse(twitchRequest.responseText));
 			} else  {
-				//let the user know
+				//let the user know if a channel doesn't exist
 				alert('channel wasn\'t found on Twitch.tv.');
-				console.log('fail?! rec\'d: ' + twitchRequest.responseText);
 			}
 		}
 	
 			twitchRequest.open('GET', channelPrefix + channelName);
 			twitchRequest.send();
-			console.log('request sent');
 	}
 
 			
 
-	//adds a successfully found channel to the page
+	//adds a channel to the page
 	function populate(data) {
-		console.log('contains keys: ' + Object.keys(data));
-		console.log('populating');
 
 		//first, get the stream data
 		var streamRequest = new XMLHttpRequest();
@@ -127,9 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 			streamRequest.open('GET', streamPrefix + data.name);
 			streamRequest.send();
-			console.log('stream request sent');
-
-		
 
 		//resume once we've gotten the data
 		function gotStreamData(stream) {
@@ -145,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			//subcontainer for the user pic
 			var userPic = document.createElement('div');
 			userPic.classList.add('userPic');
-			userPic.style['background-image'] = (data.logo) ? 'url(' + data.logo + ')':
+			userPic.style['background-image']= (data.logo) ? 'url(' + data.logo + ')':
 					'url(\'assets/question.png\')';
 			channelLink.appendChild(userPic);
 
@@ -160,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				infoDiv.isStreaming = true;
 				infoDiv.style['background-color'] = '#944';
 			} else {
-				//add h2 to previewPic that says 'offline'
+				//add a h2 to previewPic that says 'offline'
 				var offlineNote = document.createElement('h4');
 				offlineNote.textContent='offline';
 				previewPic.appendChild(offlineNote);
